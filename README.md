@@ -1,2 +1,2 @@
 # smart-ticket
-Ticketing API
+Ticketing API using python and flask
