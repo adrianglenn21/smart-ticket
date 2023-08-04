@@ -6,8 +6,6 @@ from models.key import Key
 
 app = Flask(__name__)
 
-
-# POST METHODS
 @app.route("/register", methods=["POST"])
 def register():
     if request.method == "POST":
@@ -65,6 +63,11 @@ def verify_api_key():
             return jsonify({"msg": ""}), 200
         else:
             return jsonify({"msg": "Invalid key"}), 400
+        
+@app.route("/get-user-detail/<int: userid>", methods=["GET"])
+def get_user_detail():
+    if request.method == "GET":
+        return None
 
 
 if __name__ == "__main__":
