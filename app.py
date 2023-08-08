@@ -6,6 +6,7 @@ from models.key import Key
 
 app = Flask(__name__)
 
+
 @app.route("/register", methods=["POST"])
 def register():
     if request.method == "POST":
@@ -24,7 +25,7 @@ def register():
 
 
 @app.route("/update-user-info", methods=["POST"])
-def update_user_info():
+def updateUserInfo():
     if request.method == "POST":
         userID = request.form["id"]
         firstName = request.form["firstname"]
@@ -40,7 +41,7 @@ def update_user_info():
 
 
 @app.route("/generate-api-key", methods=["GET"])
-def generate_api_key():
+def generateApiKey():
     if request.method == "GET":
         obj_key = Key()
         key = (obj_key.generateKey(1))["key"]
@@ -53,7 +54,7 @@ def generate_api_key():
 
 
 @app.route("/verify-api-key", methods=["POST"])
-def verify_api_key():
+def verifyApiKey():
     if request.method == "POST":
         apiKey = request.form["token"]
         obj_key = Key()
@@ -63,11 +64,19 @@ def verify_api_key():
             return jsonify({"msg": ""}), 200
         else:
             return jsonify({"msg": "Invalid key"}), 400
-        
-@app.route("/get-user-detail/<int: userid>", methods=["GET"])
-def get_user_detail():
+
+
+@app.route("/get-user-details/<int:userid>/<string:token>/", methods=["GET"])
+def getUserDetails(userid, token):
     if request.method == "GET":
-        return None
+        obj_user = User()
+        res = obj_user.fetch(userid)
+        isEmptyResult = res["username"] == ""
+        if not isEmptyResult:
+            obj_user.close()
+            return jsonify(res), 200
+        else:
+            return jsonify({"msg": "User not found"}), 404
 
 
 if __name__ == "__main__":
